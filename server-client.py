@@ -12,6 +12,7 @@ if len(sys.argv) != 3:
 HOST = sys.argv[1]  # Server's hostname or IP address
 PORT = int(sys.argv[2])  # Port to connect to
 
+
 def receive_messages(client_socket):
     while True:
         try:
@@ -27,19 +28,23 @@ def receive_messages(client_socket):
             print("Connection closed.")
             break
 
+
 def send_messages(client_socket):
     while True:
         try:
             # Take input from the user
             user_input = input("")
             if user_input:
-                # Add a timestamp to the message
+                # Add a local timestamp for the sent message
                 timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
-                message = f"[{timestamp}] {user_input}"
-                client_socket.send(message.encode('utf-8'))
+                print(f"[{timestamp}] You: {user_input}")
+
+                # Send the message to the server without the timestamp
+                client_socket.send(user_input.encode('utf-8'))
         except:
             print("Error sending message.")
             break
+
 
 def main():
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -57,6 +62,7 @@ def main():
     # Start a thread to send messages to the server
     send_thread = threading.Thread(target=send_messages, args=(client_socket,))
     send_thread.start()
+
 
 if __name__ == "__main__":
     main()
