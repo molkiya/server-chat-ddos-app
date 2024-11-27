@@ -1,6 +1,7 @@
 import socket
 import threading
 import sys
+from datetime import datetime
 
 # Ensure the correct number of arguments
 if len(sys.argv) != 3:
@@ -14,10 +15,11 @@ PORT = int(sys.argv[2])  # Port to connect to
 def receive_messages(client_socket):
     while True:
         try:
-            # Receive and print messages from the server
+            # Receive and print messages from the server with a timestamp
             message = client_socket.recv(1024).decode('utf-8')
             if message:
-                print(message)
+                timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
+                print(f"[{timestamp}] {message}")
             else:
                 break
         except:
