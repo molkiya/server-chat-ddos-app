@@ -30,9 +30,13 @@ def receive_messages(client_socket):
 def send_messages(client_socket):
     while True:
         try:
-            # Take input from the user and send it to the server
-            message = input("")
-            client_socket.send(message.encode('utf-8'))
+            # Take input from the user
+            user_input = input("")
+            if user_input:
+                # Add a timestamp to the message
+                timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
+                message = f"[{timestamp}] {user_input}"
+                client_socket.send(message.encode('utf-8'))
         except:
             print("Error sending message.")
             break
